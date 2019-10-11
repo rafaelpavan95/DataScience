@@ -2,9 +2,6 @@
 title: 'Projeto 1: Detecção de Fraudes no Tráfego de Cliques em Propagandas de Aplicações Mobile'
 author: "Rafael Pavan"
 date: "Outubro de 2019"
-output:
-  md_document:
-    variant: github_document
 ---
 
 Trabalho apresentado para o curso de Big Data Analytics com R e Microsoft Azure Machine Learning da Data Science Academy 
