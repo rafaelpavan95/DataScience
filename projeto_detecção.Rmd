@@ -1,0 +1,338 @@
+---
+title: 'Projeto 1: Detecção de Fraudes no Tráfego de Cliques em Propagandas de Aplicações Mobile'
+author: "Rafael Pavan"
+date: "Outubro de 2019"
+output:
+  md_document:
+    variant: github_document
+---
+
+Trabalho apresentado para o curso de Big Data Analytics com R e Microsoft Azure Machine Learning da Data Science Academy 
+
+## Introdução
+
+O risco de fraude está em toda parte, mas para as empresas que anunciam on-line, a fraude de cliques pode ocorrer em um volume esmagador, resultando em dados de cliques enganosos e desperdício de dinheiro. Os canais de anúncios podem aumentar os custos simplesmente clicando no anúncio em larga escala. Com mais de 1 bilhão de dispositivos móveis inteligentes em uso ativo todos os meses, a China é o maior mercado móvel do mundo e, portanto, sofre com grandes volumes de tráfego fraudulento.
+
+O TalkingData, a maior plataforma independente de serviço de big data da China, cobre mais de 70% dos dispositivos móveis ativos em todo o país. Eles processam 3 bilhões de cliques por dia, dos quais 90% são potencialmente fraudulentos. Sua abordagem atual para evitar a fraude de cliques para desenvolvedores de aplicativos é medir a jornada do clique de um usuário em seu portfólio e sinalizar endereços IP que produzem muitos cliques, mas nunca acabam instalando aplicativos. Com essas informações, eles criaram uma lista negra de IP e lista negra de dispositivos.
+
+Apesar de bem-sucedidos, eles querem estar sempre um passo à frente dos fraudadores e procuraram a comunidade Kaggle para obter ajuda no desenvolvimento de sua solução. Na segunda competição com o Kaggle, você é desafiado a criar um algoritmo que prevê se um usuário fará o download de um aplicativo depois de clicar em um anúncio de aplicativo para celular. Para dar suporte à sua modelagem, eles forneceram um conjunto de dados generoso, cobrindo aproximadamente 200 milhões de cliques em 4 dias!
+
+## Avaliação
+
+O método de avaliação utilizado para o modelo preditivo será a curva ROC entre o valor previsto e o valor real observado.
+
+## Dicionário de Dados
+
+ip: endereço IP do clique //
+app: ID do aplicativo para marketing //
+device: ID do tipo de dispositivo do celular do usuário //
+os: ID da versão do sistema operacional do dispositivo do usuário //
+channel: ID do canal do editor de anúncios para celular //
+click_time: registro de data e hora do clique (UTC) //
+attribute_time: se o usuário baixar o aplicativo depois de clicar em um anúncio, este é o horário do download do aplicativo //
+is_attributed: o destino a ser previsto, indicando que o aplicativo foi baixado //
+
+
+## Carregando Bibliotecas
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(kernlab)
+library(C50)
+library(precrec)
+library(mlbench)
+library(caret)
+library(randomForest)
+library(e1071)
+library(DMwR)
+library(ggplot2)
+library(caret)
+library(skimr)
+library(data.table)
+```
+
+
+## Carregando os Dados
+
+```{r}
+treino <- fread('train_sample.csv')
+teste <- fread('test.csv')
+```
+
+## Breve Visualização
+
+```{r}
+summary(teste)
+```
+
+```{r}
+str(teste)
+```
+
+```{r}
+skim(teste)
+```
+
+```{r}
+summary(treino)
+```
+
+```{r}
+str(treino)
+```
+
+```{r}
+skim(treino)
+```
+
+```{r}
+head(treino)
+```
+
+```{r}
+head(teste)
+```
+
+## Pré-Processamento dos Dados
+
+Vamos ajustar a coluna click_time, divindindo-a em ano, mês, dia e hora.
+
+```{r}
+treino$click_time <- as.POSIXct(treino$click_time)
+#teste$click_time <- as.POSIXct(teste$click_time)
+
+```
+
+
+```{r}
+treino$year <- year(treino$click_time)
+treino$month <- month(treino$click_time)
+treino$weekdays <- weekdays(treino$click_time)
+treino$hour <- hour(treino$click_time)
+#teste$year <- year(teste$click_time)
+#teste$month <- month(teste$click_time)
+#teste$weekdays <- weekdays(teste$click_time)
+#teste$hour <- hour(teste$click_time)
+treino$click_time = NULL
+#teste$click_time = NULL
+```
+
+Vamos transformar as variáveis categóricas em fator:
+
+```{r}
+treino$is_attributed <- as.factor(treino$is_attributed)
+treino$weekdays <- as.factor(treino$weekdays)
+#teste$diaSemana <- as.factor(teste$weekdays)
+```
+
+Vamos verificar a existência de valores nulos e valores 'missing' nos datasets de treino e teste:
+
+```{r}
+colSums(is.na(treino))
+```
+
+```{r}
+colSums(is.na(teste))
+```
+
+```{r}
+colSums(treino==" ")
+```
+
+```{r}
+colSums(teste==" ")
+```
+
+
+## Balanceamento
+
+Como veremos, o dataset de treino é desbalanceado, possuindo muitas variáveis do tipo 0 (Não Baixado) e poucas do tipo 1 (Baixado) na coluna is_attributed. Assim, para aplicarmos um algoritmo de aprendizado de máquina, teremos que balancear o dataset para que este não aprenda mais informações de uma classe do que outra. Para isso, utilizaremos a função SMOTE.
+
+```{r}
+table(treino$is_attributed)
+```
+
+```{r}
+
+treino$attributed_time = NULL
+
+treino_smote <- SMOTE(is_attributed ~ ., as.data.frame(treino), k = 3, perc.over = 400, perc.under = 150)
+
+```
+
+```{r}
+table(treino_smote$is_attributed)
+```
+
+Conjunto mais balanceado.
+
+## Selecionando as Variáveis
+
+
+```{r}
+head(treino_smote)
+```
+
+```{r}
+
+treino_smote$weekdays = NULL
+control <- trainControl(method="repeatedcv", number=10, repeats=3)
+model <- train(is_attributed~., data=treino_smote, method="lvq", preProcess="scale", trControl=control)
+print(varImp(model, scale=FALSE))
+
+```
+
+```{r}
+plot(varImp(model, scale=FALSE))
+```
+
+
+```{r}
+treinoa <- copy(treino_smote)
+treinoa$is_attributed = NULL
+control <- rfeControl(functions=rfFuncs, method="cv", number=10)
+results <- rfe(treinoa, treino_smote$is_attributed, sizes=c(1:10), rfeControl=control)
+print(results)
+```
+```{r}
+predictors(results)
+```
+
+```{r}
+plot(results, type=c("g", "o"))
+```
+
+## Modelagem Preditiva
+
+Utilizaremos as colunas do método RFE
+
+```{r}
+cols <- predictors(results)[1:5]
+cols
+```
+
+```{r}
+treino_rfe_cols <- treino_smote[cols]
+treino_rfe_cols$is_attributed <- treino_smote$is_attributed
+split <- createDataPartition(y = treino_rfe_cols$is_attributed, p = 0.7, list = FALSE)
+treino_s <- treino_rfe_cols[split, ]
+teste_s <- treino_rfe_cols[-split, ]
+```
+
+
+## Proporção de Treino
+
+```{r}
+round(prop.table(table(treino_s$is_attributed)),2)
+```
+
+## Proporção de Teste
+
+```{r}
+round(prop.table(table(teste_s$is_attributed)),2)
+```
+
+## Modelos
+
+# Regressão Logística
+
+```{r}
+
+lgmModel <- train(is_attributed~., data = treino_s,method = "glm",preProcess=c("scale","center"),na.action = na.omit)
+
+lgmPredictions <-predict(lgmModel, teste_s)
+
+print(confusionMatrix(lgmPredictions, teste_s$is_attributed))
+```
+
+```{r}
+lgmROC <- evalmod(scores = c(lgmPredictions), labels = teste_s$is_attributed)
+autoplot(lgmROC)
+```
+
+
+# Random Forest
+
+```{r}
+
+RFModel <- train(is_attributed~., data = treino_s, method = "rf", preProcess=c("scale","center"), na.action = na.omit)
+
+RFPredictions <- predict(RFModel, teste_s)
+
+
+```
+
+```{r}
+print(confusionMatrix(RFPredictions, teste_s$is_attributed))
+```
+
+```{r}
+
+RFROC <- evalmod(scores = c(RFPredictions), labels = teste_s$is_attributed)
+autoplot(RFROC)
+
+```
+
+# Árvores de Decisão
+
+```{r}
+DTreeModel <- train(is_attributed ~ ., data = treino_s,method = "C5.0",preProcess=c("scale","center"), na.action = na.omit)
+DTPredictions <-predict(DTreeModel, teste_s)
+print(confusionMatrix(DTPredictions, teste_s$is_attributed))
+```
+
+```{r}
+DTROC <- evalmod(scores = c(DTPredictions), labels = teste_s$is_attributed)
+autoplot(DTROC)
+```
+
+# KNN
+
+```{r}
+KNNModel <- train(is_attributed~., data = treino_s,method = "knn",preProcess=c("scale","center"), na.action = na.omit)
+
+KNNPredictions <-predict(KNNModel, teste_s)
+
+print(confusionMatrix(KNNPredictions, teste_s$is_attributed))
+```
+
+```{r}
+KNNROC <- evalmod(scores = c(KNNPredictions), labels = teste_s$is_attributed)
+autoplot(KNNROC)
+```
+
+# SVM
+
+```{r}
+SVMModel <- train(is_attributed ~ ., data = treino_s, method = "svmPoly", tuneGrid = data.frame(degree = 1, scale = 1, C = 1), preProcess = c("pca","scale","center"), na.action = na.omit)
+SVMPredictions <-predict(SVMModel, teste_s)
+print(confusionMatrix(SVMPredictions, teste_s$is_attributed))
+```
+
+```{r}
+SVMROC <- evalmod(scores = c(SVMPredictions), labels = teste_s$is_attributed)
+autoplot(SVMROC)
+```
+
+
+```{r}
+modelos<-resamples(list(SVM = SVMModel, DT = DTreeModel, RF = RFModel, KNN = KNNModel, LGM = lgmModel))
+summary(modelos)
+```
+
+
+```{r}
+scales <- list(x=list(relation = "free"), y = list(relation = "free"))
+bwplot(modelos, scales = scales)
+```
+
+Nos testes de desempenho, o modelo que obteve a melhor resposta foi o de Árvores de Decisão
+
+```{r}
+modeloescolhido <- DTreeModel
+previsoes <- predict(modeloescolhido, teste)
+previsoes 
+```
