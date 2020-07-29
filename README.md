@@ -1,5 +1,14 @@
 # DataScience
 
+# Análise do Impacto da Temperatura e Radiação Solar na Tensão e Eficiência Energética de um Painel Solar Fotovoltaico. Aplicação da Regressão Linear Múltipla e Regularização Ridge
+
+Conceitos: Python, Scikit-Learn, Regressão Linear, Regularização Ridge, Pandas, Numpy, Matplotlib, Métricas, Machine Learning
+
+[https://github.com/rafaelpavan95/DataScience/blob/master/Photovoltaic.ipynb]
+
+_________________________________________________________________________________________________________________
+
+
 # Clusterização de Padrões de Consumo de Energia Elétrica e Análise do Consumo Energético de uma Residência
 
 Conceitos: Python, Scikit-Learn, KMeans, Pandas, Numpy, Matplotlib, Métricas, Machine Learning
