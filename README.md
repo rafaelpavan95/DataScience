@@ -42,7 +42,7 @@
 
 - Otimização de Preços de Mix de Produtos
 
-- Quais Fatores Mais Causam Atritos no Ambiente de Trabalho?                                   
+- [Quais Fatores Mais Causam Desligamentos no Ambiente de Trabalho?](https://github.com/rafaelpavan95/DataScience/blob/master/RH_Analytics.ipynb)                                   
 
 - Prevendo o Tempo de Sobrevivência de Pacientes 1 Ano Após Receberem um Transplante 
 
