@@ -1,33 +1,49 @@
-# DataScience
+### + [Projetos de Ciência de Dados](https://github.com/rafaelpavan95/DataScience)
 
-# Analisando a Felicidade com Projeção Multidimensional, Coordenadas Paralelas e Random Forest
+- Detecção de Fraudes no Tráfego de Cliques em Propagandas de Aplicações Mobile 
 
-[https://github.com/rafaelpavan95/DataScience/blob/master/happiness.ipynb]
+- Prevendo Demanda de Estoque com Base em Vendas
 
-_________________________________________________________________________________________________________________
+- Prevendo o Nível de Satisfação dos Clientes do Santander
 
+- Prevendo Customer Churn em Operadoras de Telecom
 
-# Análise do Impacto da Temperatura e Radiação Solar na Tensão e Eficiência Energética de um Painel Solar Fotovoltaico. Aplicação da Regressão Linear Múltipla e Regularização Ridge
+- Implementando Slow Changing Dimensions em um DW Usando Hive e Spark
 
-[https://github.com/rafaelpavan95/DataScience/blob/master/Photovoltaic.ipynb]
+- Processamento de Logs em Tempo Real Com Flume, Spark Streaming e Hbase
 
-_________________________________________________________________________________________________________________
+- Medicina Personalizada - Redefinindo o Tratamento de Câncer
 
+- Modelagem Preditiva em IoT - Previsão de Uso de Energia
 
-# Clusterização de Padrões de Consumo de Energia Elétrica e Análise do Consumo Energético de uma Residência
+- Prevendo Tendências Macroeconômicas
 
-[https://github.com/rafaelpavan95/DataScience/blob/master/Clusteriza%C3%A7%C3%A3o_Energia.ipynb]
+- Sistema de Recomendação Para Rede de Varejo Usando Market Basket Analysis
 
-_________________________________________________________________________________________________________________
+- Análise de Risco de Crédito
+ 
+- Prevendo o Preço de Aluguel de Casas
 
-# Linear Regression: Implementa um algoritmo de Regressão Linear e o Compara com o da Biblioteca Scikit-Learn
+- Mapeando a Ocorrência do Vírus Zika
 
-[https://github.com/rafaelpavan95/DataScience/blob/master/Linear_Regression.ipynb]
+- Análise de Sentimentos em Redes Sociais
 
-_________________________________________________________________________________________________________________
+- Implememtando um Classificador de Expan com Naive Bayes
 
+- Machine Learning Para Otimização Sobre o Retorno do Investimento
 
-# Multiple Linear Regression: Implementa um algoritmo de Regressão Linear Múltipla e o Compara com o da Biblioteca Scikit-Learn
+- Otimizando o Sistema de Voos de uma Companhia Aérea
 
-[https://github.com/rafaelpavan95/DataScience/blob/master/Multiple_Linear_Regression.ipynb]
+- Segmentação de Clientes de FoodDelivery
 
+- Teste A/B
+
+- Análise de Indicadores de Performance em Redes de Varejo
+
+- Otimização de Preços de Mix de Produtos
+
+- Quais Fatores Mais Causam Atritos no Ambiente de Trabalho?                                   
+
+- Prevendo o Tempo de Sobrevivência de Pacientes 1 Ano Após Receberem um Transplante 
+
+- Análise de Redes Sociais: Twitter e Instagram
