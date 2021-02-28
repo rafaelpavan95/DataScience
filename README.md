@@ -4,6 +4,8 @@
 
 - [Quais Fatores Mais Causam Desligamentos no Ambiente de Trabalho?](https://github.com/rafaelpavan95/DataScience/blob/master/RH_Analytics.ipynb) 
 
+- [Análise de Agrupamento: Segmentação de Clientes de FoodDelivery](https://github.com/rafaelpavan95/DataScience/blob/master/food_segmentation.ipynb)
+
 - Detecção de Fraudes no Tráfego de Cliques em Propagandas de Aplicações Mobile 
 
 - Prevendo Demanda de Estoque com Base em Vendas
@@ -37,8 +39,6 @@
 - Machine Learning Para Otimização Sobre o Retorno do Investimento
 
 - Otimizando o Sistema de Voos de uma Companhia Aérea
-
-- Segmentação de Clientes de FoodDelivery
 
 - Teste A/B
 
