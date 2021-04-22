@@ -1,5 +1,7 @@
 ### + [Projetos de Ciência de Dados](https://github.com/rafaelpavan95/DataScience)
 
+- [Prevendo Sobreviventes do Titanic](https://github.com/rafaelpavan95/DataScience/blob/master/Titanic.ipynb) 
+
 - [Raspador de Tweets Genérico: Raspe Tweets Com a Palavra Chave Que Desejar](https://github.com/rafaelpavan95/DataScience/blob/master/Twitter_Scraper.ipynb) 
 
 - [Quais Fatores Mais Causam Desligamentos no Ambiente de Trabalho?](https://github.com/rafaelpavan95/DataScience/blob/master/RH_Analytics.ipynb) 
